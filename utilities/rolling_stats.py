@@ -4,7 +4,7 @@ from numba import jit
 
 
 @jit(nopython=True)
-def rolling_mean(x, window):
+def _rolling_statistic(x, window, window_divisor):
 
     if window < 0:
         raise ValueError('window must be non-negative')
@@ -37,7 +37,7 @@ def rolling_mean(x, window):
 
         if i == window - 1:
             if nans_in_window == 0:
-                res[i] = _sum / window
+                res[i] = _sum / window_divisor
                 continue
 
         if i >= window:
@@ -51,12 +51,20 @@ def rolling_mean(x, window):
                 _sum -= evict_i
 
             if nans_in_window == 0:
-                res[i] = _sum / window
+                res[i] = _sum / window_divisor
                 continue
 
         res[i] = np.nan
 
     return res
+
+
+def rolling_sum(x, window):
+    return _rolling_statistic(x, window, 1)
+
+
+def rolling_mean(x, window):
+    return _rolling_statistic(x, window, window)
 
 
 if __name__ == '__main__':

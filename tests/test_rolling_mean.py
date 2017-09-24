@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-from utilities.rolling_mean import rolling_mean
+from utilities.rolling_stats import rolling_mean
 from pytest import raises
 
 
