@@ -6,8 +6,6 @@ from pytest import raises
 
 
 def test_rolling_sum_series_containing_nans():
-
-    # set up some sample test data containing some NaNs
     x = np.arange(30).astype(float)
     s = pd.Series(x)
     s[0] = np.nan
@@ -15,33 +13,25 @@ def test_rolling_sum_series_containing_nans():
     s[12:18] = np.nan
     s[-1] = np.nan
 
-    # define a small, arbitrary window
     window = 3
 
-    # check outputs
     expected = s.rolling(window=window).sum().values
     output = rolling_sum(s.values, window)
     assert np.allclose(output, expected, equal_nan=True)
 
 
 def test_rolling_sum_no_nans():
-
-    # set up some sample test data containing some NaNs
     x = np.arange(100).astype(float)
     s = pd.Series(x)
 
-    # define a small, arbitrary window
     window = 5
 
-    # check outputs
     expected = s.rolling(window=window).sum().values
     output = rolling_sum(s.values, window)
     assert np.allclose(output, expected, equal_nan=True)
 
 
 def test_rolling_sum_various_window_sizes():
-
-    # set up some sample test data containing some NaNs
     x = np.arange(40).astype(float)
     s = pd.Series(x)
     s[:10] = np.nan
@@ -53,8 +43,6 @@ def test_rolling_sum_various_window_sizes():
 
 
 def test_rolling_sum_window_size_one():
-
-    # set up some sample test data containing some NaNs
     x = np.arange(10).astype(float)
     s = pd.Series(x)
     window = 1
@@ -66,8 +54,6 @@ def test_rolling_sum_window_size_one():
 
 
 def test_rolling_sum_window_size_zero():
-
-    # set up some sample test data containing some NaNs
     x = np.arange(10).astype(float)
     s = pd.Series(x)
     window = 0
@@ -77,8 +63,6 @@ def test_rolling_sum_window_size_zero():
 
 
 def test_rolling_sum_window_size_negative():
-
-    # set up some sample test data containing some NaNs
     x = np.arange(10).astype(float)
     s = pd.Series(x)
     window = -1
