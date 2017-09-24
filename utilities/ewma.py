@@ -1,7 +1,9 @@
 import numpy as np
 from numpy import empty
+from numba import jit
 
 
+@jit(nopython=True)
 def ewma(data, alpha, adjust, ignore_na):
 
     old_wt_factor = 1. - alpha
