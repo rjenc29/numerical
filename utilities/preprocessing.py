@@ -18,6 +18,22 @@ def standard_scale(data):
     return res
 
 
+@jit(nopython=True)
+def min_max_scale(data):
+
+    n = data.shape[1]
+
+    res = np.empty_like(data)
+
+    data_t = data.T
+
+    for i in range(n):
+        data_i = data_t[i, :]
+        res[:, i] = (data_i - np.min(data_i)) / (np.max(data_i) - np.min(data_i))
+
+    return res
+
+
 if __name__ == '__main__':
     import pytest
     pytest.main()
