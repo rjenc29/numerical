@@ -1,8 +1,10 @@
 import numpy as np
+import pandas as pd
 from unittest import TestCase
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.datasets import load_iris
 from utilities.preprocessing import standard_scale, min_max_scale
+from pytest import raises
 
 
 class RollingStatsTests:
@@ -22,6 +24,24 @@ class StandardScaleTests(TestCase, RollingStatsTests):
         super().setUp()
         self._func = standard_scale
         self._scaler = StandardScaler
+
+    def test_standard_scale_ddof_one(self):
+        predictors = load_iris().data
+        df = pd.DataFrame(predictors)
+
+        def zscore(data):
+            return (data - data.mean()) / data.std(ddof=1)  # pandas default
+
+        expected = df.apply(zscore)
+        output = self._func(predictors, ddof=1)
+        assert np.allclose(expected, output)
+
+    def test_standard_scale_raise_if_ddof_not_one_or_zero(self):
+        predictors = load_iris().data
+
+        for ddof in -1, 2:
+            with raises(ValueError, message='ddof mus be either 0 or 1'):
+                _ = self._func(predictors, ddof=ddof)
 
 
 class MinMaxScaleTests(TestCase, RollingStatsTests):
