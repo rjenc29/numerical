@@ -6,7 +6,7 @@ from numba import jit
 def standard_scale(data, ddof=0):
 
     if ddof not in (0, 1):
-        raise ValueError('ddof mus be either 0 or 1')
+        raise ValueError('ddof must be either 0 or 1')
 
     n = data.shape[1]
     res = np.empty_like(data)

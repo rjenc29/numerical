@@ -40,7 +40,7 @@ class StandardScaleTests(TestCase, RollingStatsTests):
         predictors = load_iris().data
 
         for ddof in -1, 2:
-            with raises(ValueError, message='ddof mus be either 0 or 1'):
+            with raises(ValueError, message='ddof must be either 0 or 1'):
                 _ = self._func(predictors, ddof=ddof)
 
 
