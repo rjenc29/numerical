@@ -11,7 +11,7 @@ def rank_data(A):
     """
     assert A.ndim > 1
 
-    A = A.astype(np.float64)  # may result in spurious ties or differences across platforms
+    A = A.astype(np.float64)  # may result in spurious ties
 
     res = np.empty_like(A)
     m = A.shape[0]
