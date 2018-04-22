@@ -7,10 +7,6 @@ from numba.extending import overload, register_jitable
 
 @register_jitable
 def _collect_percentiles(a, q, skip_nan=False):
-
-    if np.any(np.isnan(q)):
-        raise ValueError('q must not be NaN')
-
     a_sorted = np.sort(a.flatten())
 
     if skip_nan:
@@ -27,7 +23,7 @@ def _collect_percentiles(a, q, skip_nan=False):
 
     for v in np.nditer(q):
         percentile = v.item()
-        if percentile < 0 or percentile > 100:
+        if percentile < 0 or percentile > 100 or np.isnan(percentile):
             raise ValueError("Percentiles must be in the range [0,100]")
 
         if percentile == 0:
@@ -35,10 +31,11 @@ def _collect_percentiles(a, q, skip_nan=False):
         elif percentile == 100:
             val = a_sorted[-1]
         else:
-            rank = percentile / 100 * (len(a_sorted) - 1) + 1
+            rank = 1 + (len(a_sorted) - 1) * percentile / 100
             f = math.floor(rank)
             m = rank - f
-            val = a_sorted[f - 1] + m * (a_sorted[f] - a_sorted[f - 1])
+            prior_val = a_sorted[f - 1]
+            val = prior_val + m * (a_sorted[f] - prior_val)
         out[i] = val
         i += 1
 
